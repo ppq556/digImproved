@@ -12,8 +12,8 @@
 
 #### Użycie
 ```shell script
-docker build . -t digImproved           # tylko za pierwszym razem
-docker run digImproved > wykop.html
+docker build . -t digimproved           # tylko za pierwszym razem
+docker run digimproved > wykop.html
 ```
 
 ### Wersja standalone
