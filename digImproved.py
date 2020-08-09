@@ -37,9 +37,12 @@ class Entry:
 		self.tags = []
 		self.hotOrNot = ""
 
+	def __lt__(self, other):
+		return self.eid < other.eid
+
 	def __str__(self):
-		# jeśli wpis nie ma autora, pomijamy go
-		if self.author == "":
+		# jeśli wpis nie ma autora lub identyfikatora, pomijamy go
+		if self.author == "" or self.eid == "":
 			return ""
 
 		# jeśli lead / text / site zewnętrzny / author / tag pasuje do filtrów, pomijamy go
@@ -85,7 +88,8 @@ class Entry:
 EntriesList = []
 
 def printEntries():
-	for Entry in EntriesList:
+	SortedEntriesList = sorted(EntriesList, reverse=True)
+	for Entry in SortedEntriesList:
 		print(str(Entry))
 
 class DigHTMLParser(HTMLParser):
