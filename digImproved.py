@@ -3,7 +3,7 @@
 import httplib2
 import urllib
 import re
-
+from past.builtins import execfile
 from html.parser import HTMLParser
 
 ### Ustawienia
@@ -13,12 +13,9 @@ entryClass = "^link iC( )?( hot)?$"
 tagClass = "fix-tagline"
 # modyfikator znaleziska "gorącego"
 hotModifier = "hot"
-# cechy/treść znalezisk natrętnych/powtarzalnych (regexp)
-blacklisted_leads = "^(.*korona.*wirus.*|.*lgbt.*|.*margot.*)$"
-blacklisted_text = "^(.*korona.*wirus.*|.*lgbt.*|.*homoseks.*|.*margot.*)$"
-blacklisted_sites = "^(rmf24.pl|tvp.info|regiony.tvp.pl)$"
-blacklisted_tags = "^(koronawirus|covid19|.*corona.*|.*korona.*wirus|lgbt)$"
-blacklisted_authors = "^(Wykop Poleca)$"
+
+# wartości do konfiguracji przez użytkownika (w osobnym pliku)
+execfile('dig_settings.py')
 
 ### Początek kodu
 class Entry:
@@ -80,8 +77,8 @@ class DigHTMLParser(HTMLParser):
 		if self.inside_entry != 1:
 			return
 
-		### odrzucanie wartości, które są do niczego nie potrzebne i psują interpretację
-		if tag == "" and (re.match(re.compile("^(wykop|@|#|\+[0-9]+ inne|[\s]+opublikowany[\s]+)$"), data) != None or re.match(re.compile("^[\s]+$"), data) != None):
+		### odrzucanie wartości, które są do niczego niepotrzebne i psują interpretację
+		if tag == "" and (re.match(re.compile("^(wykop|@|#|\+[0-9]+ inne|[\s]+opublikowany[\s]+|\+1 inny)$"), data) != None or re.match(re.compile("^[\s]+$"), data) != None):
                         return	
 		if tag == "a" and (re.match(re.compile("^(.*https://www.wykop.pl/rejestracja/.*)$"), str(data)) != None):
                         return	
@@ -181,6 +178,10 @@ http = httplib2.Http()
 
 # Parametry żądania
 content = http.request("http://www.wykop.pl/", method="GET")[1]
+page = 2
+while page <= dig_numPages:
+        content += http.request("http://www.wykop.pl/strona/" + str(page), method="GET")[1]
+        page += 1
 
 # Wywołujemy parse'owanie
 parser = DigHTMLParser()
