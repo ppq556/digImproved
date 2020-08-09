@@ -59,28 +59,28 @@ class Entry:
 				return ""
 
 		# pozostałe wpisy ubieramy w odpowiedni HTML i zwracamy
-		HTMLOutput  = '<li class="link iC ' + self.hotOrNot + '">\n\t<div class="article  clearfix preview   dC" data-type="link" data-id="' + self.eid + '">\n\t\t'
+		HTMLOutput  = '<li class="link iC ' + self.hotOrNot + '"><div class="article  clearfix preview   dC" data-type="link" data-id="' + self.eid + '">'
 
 		# czy wpis jest "gorący"?
 		if self.hotOrNot == hotModifier:
-			HTMLOutput += '<i class="icon hot"></i>\n\t\t'
+			HTMLOutput += '<i class="icon hot"></i>'
 
-		HTMLOutput += '<div class="diggbox ">\n\t\t\t<a href="#' + self.eid + '" data-ajaxurl="" title="wykop to znalezisko" class="ajax">\n\t\t\t\t<span>' + self.upvotes
-		HTMLOutput += '</span>\n\t\t\t</a>\n\t\t</div>\n\n\n\n\n\t\t<div class="media-content m-reset-float ">\n\t\t\t<a href="' + self.intUrl + '" rel="nofollow noopener noreferrer" title="" >\n\t\t\t\t<img src="'
-		HTMLOutput += self.imgPrevUrl + '"  alt="' + self.imgPrevAlt + '">\n\t\t\t</a>\n\t\t</div>\n\n\t\t<div class="lcontrast m-reset-margin">\n\t\t\t<h2>\n\t\t\t\t<a href="' + self.intUrl
-		HTMLOutput += '" rel="nofollow noopener noreferrer" title="' + self.lead + '" >' + self.imgPrevAlt + '</a>\n\t\t\t</h2>\n\n\t\t\t<div class="fix-tagline">\n\t\t\t\t<a class="color-2 affect" href="https://www.wykop.pl/ludzie/'
-		HTMLOutput += self.author + '/"><em>@</em>' + self.author + '</a>\n\n\t\t\t\t<span class="tag create">\n\t\t\t\t\t<a class="affect" href="' + self.extUrl
-		HTMLOutput += '" title="Otwórz źródło znaleziska" rel="nofollow noopener" target="_blank">' + self.extSite + '</a>\n\t\t\t\t</span>\n\n\t\t\t\t<span class="tag create">\n\t\t\t\t\t<a class="affect"  href="https://www.wykop.pl/domena/'
-		HTMLOutput += self.extSite + '/" title="Zobacz inne znaleziska z tej domeny" />\n\t\t\t\t</span>\n\n'
+		HTMLOutput += '<div class="diggbox "><a href="#' + self.eid + '" data-ajaxurl="" title="wykop to znalezisko" class="ajax"><span>' + self.upvotes
+		HTMLOutput += '</span></a></div><div class="media-content m-reset-float "><a href="' + self.intUrl + '" rel="nofollow noopener noreferrer" title="" ><img src="'
+		HTMLOutput += self.imgPrevUrl + '"  alt="' + self.imgPrevAlt + '"></a></div><div class="lcontrast m-reset-margin"><h2><a href="' + self.intUrl
+		HTMLOutput += '" rel="nofollow noopener noreferrer" title="' + self.lead + '" >' + self.imgPrevAlt + '</a></h2><div class="fix-tagline"><a class="color-2 affect" href="https://www.wykop.pl/ludzie/'
+		HTMLOutput += self.author + '/"><em>@</em>' + self.author + '</a><span class="tag create"><a class="affect" href="' + self.extUrl
+		HTMLOutput += '" title="Otwórz źródło znaleziska" rel="nofollow noopener" target="_blank">' + self.extSite + '</a></span><span class="tag create"><a class="affect"  href="https://www.wykop.pl/domena/'
+		HTMLOutput += self.extSite + '/" title="Zobacz inne znaleziska z tej domeny" /></span>'
 
 		# tagi dodajemy w specjalny sposób
 		for Tag in self.tags:
-			HTMLOutput += '\t\t\t\t<a class="tag affect create " href="https://www.wykop.pl/tag/' + Tag + '/"><em>#</em>' + Tag + '</a>\n'
+			HTMLOutput += '<a class="tag affect create " href="https://www.wykop.pl/tag/' + Tag + '/"><em>#</em>' + Tag + '</a>'
 
-		HTMLOutput += '\t\t\t</div>\n\n\t\t\t<div class="description">\n\t\t\t\t<p class="text">\n\t\t\t\t\t<a href="' + self.intUrl + '" title="">\n\t\t\t\t\t' + self.text
-		HTMLOutput += '\n\t\t\t\t\t</a>\n\t\t\t\t</p>\n\t\t\t</div>\n\n\t\t\t<div class="row elements">\n\t\t\t\t<a class="affect" href="' + self.intUrl + '">' + self.comments
-		HTMLOutput += '</a>\n\n\t\t\t\t<span class="affect">opublikowany \n\t\t\t\t\t<time title="' + self.dateSimple + '" datetime="' + self.dateExtend + '" itemprop="datePublished">'
-		HTMLOutput += self.dateMinsAgo + '</time>\n\t\t\t\t</span>\n\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</li>'
+		HTMLOutput += '</div><div class="description"><p class="text"><a href="' + self.intUrl + '" title="">' + self.text
+		HTMLOutput += '</a></p></div><div class="row elements"><a class="affect" href="' + self.intUrl + '">' + self.comments
+		HTMLOutput += '</a><span class="affect">opublikowany <time title="' + self.dateSimple + '" datetime="' + self.dateExtend + '" itemprop="datePublished">'
+		HTMLOutput += self.dateMinsAgo + '</time></span></div></div></div></li>'
 
 		return HTMLOutput
 
