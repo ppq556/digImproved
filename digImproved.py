@@ -177,10 +177,10 @@ class DigHTMLParser(HTMLParser):
 http = httplib2.Http()
 
 # Parametry żądania
-content = http.request("http://www.wykop.pl/", method="GET")[1]
+content = http.request("https://www.wykop.pl/", method="GET")[1]
 page = 2
 while page <= dig_numPages:
-        content += http.request("http://www.wykop.pl/strona/" + str(page), method="GET")[1]
+        content += http.request("https://www.wykop.pl/strona/" + str(page), method="GET")[1]
         page += 1
 
 # Wywołujemy parse'owanie
