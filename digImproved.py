@@ -97,7 +97,7 @@ class DigHTMLParser(HTMLParser):
 	processing_tags = 0
 
 	def process_data(self, tag, data):
-		### przychodzące dane interesują nas tylko w trybie analizy konkretnego ogłoszenia
+		### przychodzące dane interesują nas tylko w trybie analizy konkretnego znaleziska
 		if self.inside_entry != 1:
 			return
 
@@ -166,7 +166,7 @@ class DigHTMLParser(HTMLParser):
 
 	def handle_starttag(self, tag, attrs):
 		### każdy otwarty tag analizujemy
-		# jeśli tagiem jest div, to analizujemy szczególnie mocno
+		# jeśli tagiem jest li, to analizujemy szczególnie mocno
 		if tag == "li":
 			for attr in attrs:
 				# jeśli nowy obiekt li należy do odpowiedniej klasy, to wchodzimy w tryb ogłoszenia
