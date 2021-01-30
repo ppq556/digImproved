@@ -45,7 +45,7 @@ class Entry:
 		if self.author == "" or self.eid == "":
 			return ""
 
-		# jeśli lead / text / site zewnętrzny / author / tag pasuje do filtrów, pomijamy go
+		# jeśli lead / text / site zewnętrzny / author / tag / eid pasuje do filtrów, pomijamy go
 		if re.match(re.compile(blacklisted_leads, flags=re.IGNORECASE), self.lead) != None:
                         return ""
 		if re.match(re.compile(blacklisted_text, flags=re.IGNORECASE), self.text) != None:
@@ -53,6 +53,8 @@ class Entry:
 		if re.match(re.compile(blacklisted_sites, flags=re.IGNORECASE), self.extSite) != None:
                         return ""
 		if re.match(re.compile(blacklisted_authors, flags=re.IGNORECASE), self.author) != None:
+                        return ""
+		if re.match(re.compile(blacklisted_eids), self.eid) != None:
                         return ""
 		for tag in self.tags:
 			if re.match(re.compile(blacklisted_tags, flags=re.IGNORECASE), tag) != None:
@@ -68,7 +70,7 @@ class Entry:
 		HTMLOutput += '<div class="diggbox "><a href="#' + self.eid + '" data-ajaxurl="" title="wykop to znalezisko" class="ajax"><span>' + self.upvotes
 		HTMLOutput += '</span></a></div><div class="media-content m-reset-float "><a href="' + self.intUrl + '" rel="nofollow noopener noreferrer" title="" ><img src="'
 		HTMLOutput += self.imgPrevUrl + '"  alt="' + self.imgPrevAlt + '"></a></div><div class="lcontrast m-reset-margin"><h2><a href="' + self.intUrl
-		HTMLOutput += '" rel="nofollow noopener noreferrer" title="' + self.lead + '" >' + self.imgPrevAlt + '</a></h2><div class="fix-tagline"><a class="color-2 affect" href="https://www.wykop.pl/ludzie/'
+		HTMLOutput += '" rel="nofollow noopener noreferrer" title="' + self.imgPrevAlt + '" >' + self.lead + '</a></h2><div class="fix-tagline"><a class="color-2 affect" href="https://www.wykop.pl/ludzie/'
 		HTMLOutput += self.author + '/"><em>@</em>' + self.author + '</a><span class="tag create"><a class="affect" href="' + self.extUrl
 		HTMLOutput += '" title="Otwórz źródło znaleziska" rel="nofollow noopener" target="_blank">' + self.extSite + '</a></span><span class="tag create"><a class="affect"  href="https://www.wykop.pl/domena/'
 		HTMLOutput += self.extSite + '/" title="Zobacz inne znaleziska z tej domeny" /></span>'
@@ -80,7 +82,7 @@ class Entry:
 		HTMLOutput += '</div><div class="description"><p class="text"><a href="' + self.intUrl + '" title="">' + self.text
 		HTMLOutput += '</a></p></div><div class="row elements"><a class="affect" href="' + self.intUrl + '">' + self.comments
 		HTMLOutput += '</a><span class="affect">opublikowany <time title="' + self.dateSimple + '" datetime="' + self.dateExtend + '" itemprop="datePublished">'
-		HTMLOutput += self.dateMinsAgo + '</time></span></div></div></div></li>'
+		HTMLOutput += self.dateMinsAgo + '</time> ' + '[' + self.eid + ']' + '</span></div></div></div></li>'
 
 		return HTMLOutput
 
