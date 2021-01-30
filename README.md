@@ -3,14 +3,15 @@
 ## Motywacja
 - usunięcie reklam, znalezisk sponsorowanych oraz toksycznych stron pseudoinformacyjnych (np. rmf.fm)
 
-## Instrukcja
+## Bugi
+- skrypt może obecnie pokazywać duplikaty znalezisk (od jednego do kilku identycznych, jedno pod drugim) - do poprawienia
 
-### Wersja z dockerem
+### Wersja z dockerem (opcjonalne)
 
-#### Wymagania
+## Wymagania
 - [Docker](https://docs.docker.com/install/)
 
-#### Użycie
+## Użycie
 ```shell script
 docker build . -t digimproved           # tylko za pierwszym razem
 docker run digimproved > wykop.html
@@ -18,11 +19,11 @@ docker run digimproved > wykop.html
 
 ### Wersja standalone
 
-#### Wymagania
+## Wymagania
 - python3 (apt install python3)
 - python3-httplib2 (apt install python3-httplib2)
 
-#### Użycie
+## Użycie
 ```shell script
 python3 digImproved.py > wykop.html
 firefox wykop.html
