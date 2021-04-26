@@ -3,6 +3,7 @@
 import httplib2
 import urllib
 import re
+import base64
 from past.builtins import execfile
 from html.parser import HTMLParser
 
@@ -106,7 +107,7 @@ class DigHTMLParser(HTMLParser):
 		### odrzucanie wartości, które są do niczego niepotrzebne i psują interpretację
 		if tag == "" and (re.match(re.compile("^(wykop|@|#|\+[0-9]+ inne|[\s]+opublikowany[\s]+|\+1 inny)$"), data) != None or re.match(re.compile("^[\s]+$"), data) != None):
                         return	
-		if tag == "a" and (re.match(re.compile("^(.*https://www.wykop.pl/rejestracja/.*)$"), str(data)) != None):
+		if tag == "a" and (re.match(re.compile("^(.*https://www.wykop.pl/(rejestracja|domena)/.*)$"), str(data)) != None):
                         return	
 
 		### jeśli otrzymaliśmy tylko tekst - poza tagiem - uzupełniamy odpowiednie atrybuty obiektu
@@ -125,13 +126,13 @@ class DigHTMLParser(HTMLParser):
 				if EntriesList[-1].upvotes == "":
 					EntriesList[-1].upvotes = data
 				elif EntriesList[-1].lead == "":
-					EntriesList[-1].lead = str(data).strip()
+					EntriesList[-1].lead = str(data).replace("\n", "")
 				elif EntriesList[-1].text == "":
-					EntriesList[-1].text = str(data).strip()
+					EntriesList[-1].text = str(data).replace("\n", "")
 				elif EntriesList[-1].comments == "":
-					EntriesList[-1].comments = str(data).strip()
+					EntriesList[-1].comments = str(data).replace("\n", "")
 				elif EntriesList[-1].dateMinsAgo == "":
-					EntriesList[-1].dateMinsAgo = str(data).strip()
+					EntriesList[-1].dateMinsAgo = str(data).replace("\n", "")
 
 			return
 
@@ -157,14 +158,14 @@ class DigHTMLParser(HTMLParser):
 					EntriesList[-1].dateSimple = attr[1]
 				if EntriesList[-1].dateExtend == "" and attr[0] == "datetime":
 					EntriesList[-1].dateExtend = attr[1]
-		if tag == "a":
-			extMatched = 0
-			for attr in data:
-				if attr[0] == "class" and attr[1] == "affect":
-					extMatched = 1
-				if attr[0] == "href" and extMatched == 1 and EntriesList[-1].extUrl == "":
-					EntriesList[-1].extUrl = attr[1]
-
+			if tag == "span":
+				arr = []
+				for spattr in data:
+					if len(spattr) == 2:
+						arr.append(spattr[0])
+						arr.append(spattr[1])
+				if EntriesList[-1].extUrl == "" and len(arr) == 4 and arr[0] == "class" and arr[1] == "affect" and arr[2] == "data-wyr":
+					EntriesList[-1].extUrl = str(base64.b64decode(arr[3]), "utf-8")
 
 	def handle_starttag(self, tag, attrs):
 		### każdy otwarty tag analizujemy
@@ -204,6 +205,7 @@ http = httplib2.Http()
 
 # Parametry żądania
 content = http.request("https://www.wykop.pl/", method="GET")[1]
+
 page = 2
 while page <= dig_numPages:
         content += http.request("https://www.wykop.pl/strona/" + str(page), method="GET")[1]
