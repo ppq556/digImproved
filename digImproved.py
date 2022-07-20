@@ -14,6 +14,10 @@ entryClass = "^link iC( )?( hot)?$"
 tagClass = "fix-tagline"
 # modyfikator znaleziska "gorącego"
 hotModifier = "hot"
+# base URL Wykopu
+entryBaseURL = "https://www.wykop.pl/link/"
+# lead znalezisk 18+
+adultonlyLead = "Zawiera treści przeznaczone dla osób pełnoletnich."
 
 # wartości do konfiguracji przez użytkownika (w osobnym pliku)
 execfile('dig_settings.py')
@@ -42,9 +46,19 @@ class Entry:
 		return self.eid < other.eid
 
 	def __str__(self):
-		# jeśli wpis nie ma autora lub identyfikatora, pomijamy go
-		if self.author == "" or self.eid == "":
+		# jeśli wpis nie ma identyfikatora, pomijamy go
+		if self.eid == "":
 			return ""
+
+		# jeśli wpis jest 18+ to pokazujemy co się da bez logowania
+		if self.lead == adultonlyLead:
+			self.intUrl = entryBaseURL + self.eid
+			self.extUrl = self.intUrl
+			self.lead = self.imgPrevAlt
+			self.text = self.imgPrevAlt
+			self.author = "18+"
+			self.comments = "Komentarze"
+			self.dateMinsAgo = ""
 
 		# jeśli lead / text / site zewnętrzny / author / tag / eid pasuje do filtrów, pomijamy go
 		if re.match(re.compile(blacklisted_leads, flags=re.IGNORECASE), self.lead) != None:
@@ -82,7 +96,9 @@ class Entry:
 
 		HTMLOutput += '</div><div class="description"><p class="text"><a href="' + self.intUrl + '" title="">' + self.text
 		HTMLOutput += '</a></p></div><div class="row elements"><a class="affect" href="' + self.intUrl + '">' + self.comments
-		HTMLOutput += '</a><span class="affect">opublikowany <time title="' + self.dateSimple + '" datetime="' + self.dateExtend + '" itemprop="datePublished">'
+
+		if self.dateMinsAgo != "":
+			HTMLOutput += '</a><span class="affect">opublikowany <time title="' + self.dateSimple + '" datetime="' + self.dateExtend + '" itemprop="datePublished">'
 		HTMLOutput += self.dateMinsAgo + '</time> ' + '[' + self.eid + ']' + '</span></div></div></div></li>'
 
 		return HTMLOutput
